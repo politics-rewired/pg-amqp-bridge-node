@@ -1,0 +1,32 @@
+{
+  "extends": [
+    "tslint:latest",
+    "tslint-config-airbnb",
+    "tslint-config-prettier"
+  ],
+  "rules": {
+    "interface-name": [true, "never-prefix"],
+    // TODO: allow devDependencies only in **/*.spec.ts files:
+    // waiting on https://github.com/palantir/tslint/pull/3708
+    "no-implicit-dependencies": [true, "dev"],
+
+    /* Rewired Rules */
+    "variable-name": {
+      "options": [
+        "ban-keywords",
+        "check-format",
+        "allow-leading-underscore",
+        "require-const-for-all-caps"
+      ]
+    },
+
+    "import-name": {
+      "options": [true, { "airtable": "Airtable", "pgCursor": "Cursor" }]
+    },
+
+    // https://github.com/palantir/tslint/pull/3607#issuecomment-355713503
+    "object-literal-sort-keys": [true, "shorthand-first"],
+    "object-shorthand-properties-first": false
+    /* End Rewired Rules */
+  }
+}
