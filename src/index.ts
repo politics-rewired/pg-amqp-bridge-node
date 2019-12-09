@@ -1,6 +1,7 @@
 import config from './lib/config';
 import { createPublisher } from './lib/publisher';
 import { registerListener } from './lib/listener';
+import { createAcker } from './lib/acker';
 
 const main = async () => {
   const bridges = config.bridgeChannels.split(',');
@@ -10,7 +11,9 @@ const main = async () => {
       const [pgChannel, amqpExhange] = bridge.split(':');
 
       const publisher = await createPublisher(amqpExhange);
-      await registerListener(pgChannel, publisher);
+      const acker = createAcker();
+
+      await registerListener(pgChannel, [publisher, acker]);
       console.log(
         `Ready to accept messages on pg channel ${pgChannel} – forwarding to exchange ${amqpExhange}`
       );
