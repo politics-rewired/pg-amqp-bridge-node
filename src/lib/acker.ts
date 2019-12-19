@@ -20,7 +20,6 @@ export const createAcker = () => {
   return async (message: Notification) => {
     try {
       const splitByBar = message.payload.split('|');
-      const routingKey = splitByBar[0];
       const stringContents = splitByBar.slice(1).join('|');
 
       const json = JSON.parse(stringContents);
@@ -28,7 +27,7 @@ export const createAcker = () => {
 
       if (config.verbose) {
         console.log(`Acking job ${job_id}`);
-        const result = await pool.query(
+        await pool.query(
           'update assemble_worker.jobs set last_acked_at = $1 where id = $2',
           [new Date(), job_id]
         );
