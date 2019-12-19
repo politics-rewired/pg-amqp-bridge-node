@@ -1,10 +1,12 @@
-import { Client, Notification } from 'pg';
+import { Notification } from 'pg';
 import config from './config';
 import createSubscriber from 'pg-listen';
 
-const client = new Client({ connectionString: config.databaseUrl });
 const subscriber = createSubscriber(
   { connectionString: config.databaseUrl },
+  // by default, pg-listen assumes your payload is JSON
+  // we use a custom format - ${routingKey}|${jobPayload}
+  // parsing this format is handled elsewhere in in the publisher / acker
   { parse: s => s }
 );
 
@@ -23,4 +25,6 @@ export const registerListener = async (channel: string, fns: Listener[]) => {
 
   await subscriber.connect();
   await subscriber.listenTo(channel);
+
+  console.log(`Listening for messages updates on pg channel ${channel}`);
 };
