@@ -1,21 +1,30 @@
-import { Client, Notification } from 'pg';
+import { Notification } from 'pg';
 import config from './config';
+import createSubscriber from 'pg-listen';
 
-const client = new Client({ connectionString: config.databaseUrl });
+const subscriber = createSubscriber(
+  { connectionString: config.databaseUrl },
+  // by default, pg-listen assumes your payload is JSON
+  // we use a custom format - ${routingKey}|${jobPayload}
+  // parsing this format is handled elsewhere in in the publisher / acker
+  { parse: s => s }
+);
+
 type Listener = (msg: Notification) => void;
 
 export const registerListener = async (channel: string, fns: Listener[]) => {
   for (let fn of fns) {
-    client.on('notification', fn);
+    subscriber.events.on('notification', fn);
   }
 
-  client.on('error', (err: Error) => {
-    console.error('Client got error', err);
-    console.log('Shutting down');
+  subscriber.events.on('error', (err: Error) => {
+    console.error('Client got fatal error', err);
+    console.log('Shutting down...');
     process.exit();
   });
 
-  await client.connect();
-  await client.query(`LISTEN ${channel}`);
+  await subscriber.connect();
+  await subscriber.listenTo(channel);
+
   console.log(`Listening for messages updates on pg channel ${channel}`);
 };

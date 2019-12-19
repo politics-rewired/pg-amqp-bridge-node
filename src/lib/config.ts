@@ -24,7 +24,7 @@ const config: Config = {
   amqpUrl: env.AMQP_URI,
   databaseUrl: env.POSTGRESQL_URI,
   bridgeChannels: env.BRIDGE_CHANNELS,
-  verbose: env.VERBOSE || env.isDev
+  verbose: env.VERBOSE
 };
 
 export default config;
