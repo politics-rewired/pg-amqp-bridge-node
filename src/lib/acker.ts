@@ -3,10 +3,15 @@ import { Pool, Notification } from 'pg';
 
 const REQUEUE_CHECK = 30000;
 
+let timeout: NodeJS.Timeout = undefined;
+process.on('exit', () => {
+  if (timeout) clearTimeout(timeout);
+});
+
 export const createAcker = () => {
   const pool = new Pool({ connectionString: config.databaseUrl });
 
-  setTimeout(async () => {
+  timeout = setTimeout(async () => {
     console.log(`Renotifying unacked jobs older than ${REQUEUE_CHECK}`);
     try {
       await pool.query(

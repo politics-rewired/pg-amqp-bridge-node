@@ -10,6 +10,10 @@ const subscriber = createSubscriber(
   { parse: s => s }
 );
 
+process.on('exit', () => {
+  subscriber.close();
+});
+
 type Listener = (msg: Notification) => void;
 
 export const registerListener = async (channel: string, fns: Listener[]) => {
@@ -20,7 +24,7 @@ export const registerListener = async (channel: string, fns: Listener[]) => {
   subscriber.events.on('error', (err: Error) => {
     console.error('Client got fatal error', err);
     console.log('Shutting down...');
-    process.exit();
+    process.exit(1);
   });
 
   await subscriber.connect();
