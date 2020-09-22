@@ -24,7 +24,10 @@ export const createPublisher = async exchange => {
       const contents = Buffer.from(stringContents);
 
       if (config.verbose) {
-        console.log(`Forwarding message to ${routingKey}: ${stringContents}`);
+        const now = new Date().toISOString();
+        console.log(
+          `${now} INFO Forwarding message to ${routingKey}: ${stringContents}`
+        );
       }
 
       channel.publish(exchange, routingKey, contents);
