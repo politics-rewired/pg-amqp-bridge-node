@@ -7,15 +7,32 @@ export const createPublisher = async exchange => {
   const channel = await connection.createChannel();
 
   return (message: Notification) => {
-    const splitByBar = message.payload.split('|');
-    const routingKey = splitByBar[0];
-    const stringContents = splitByBar.slice(1).join('|');
-    const contents = Buffer.from(stringContents);
+    const messageStr = JSON.stringify(message);
 
-    if (config.verbose) {
-      console.log(`Forwarding message to ${routingKey}: ${stringContents}`);
+    if (!message.payload) {
+      const now = new Date().toISOString();
+      console.log(
+        `${now} WARN encountered empty payload for message: ${messageStr}`
+      );
+      return;
     }
 
-    channel.publish(exchange, routingKey, contents);
+    try {
+      const splitByBar = message.payload.split('|');
+      const routingKey = splitByBar[0];
+      const stringContents = splitByBar.slice(1).join('|');
+      const contents = Buffer.from(stringContents);
+
+      if (config.verbose) {
+        console.log(`Forwarding message to ${routingKey}: ${stringContents}`);
+      }
+
+      channel.publish(exchange, routingKey, contents);
+    } catch (err) {
+      const now = new Date().toISOString();
+      console.log(
+        `${now} ERROR encountered error publishing message: ${err.message}. Message: ${messageStr}`
+      );
+    }
   };
 };
