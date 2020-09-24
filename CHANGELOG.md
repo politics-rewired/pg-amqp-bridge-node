@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.1](https://github.com/politics-rewired/pg-amqp-bridge-node/compare/v1.0.0...v1.0.1) (2020-09-24)
+
+
+### Bug Fixes
+
+* persist messages ([#13](https://github.com/politics-rewired/pg-amqp-bridge-node/issues/13)) ([8aa6497](https://github.com/politics-rewired/pg-amqp-bridge-node/commit/8aa64978cd0114c9458ce1034ecde6e118c43ae3))
+
 ## 1.0.0 (2020-09-22)
 
 

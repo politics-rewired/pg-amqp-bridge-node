@@ -1,6 +1,6 @@
 {
   "name": "pg-amqp-bridge-node",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Node port of pg-amqp-bridge to get around Postgresql SSL issues",
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",
