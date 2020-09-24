@@ -30,7 +30,10 @@ export const createPublisher = async exchange => {
         );
       }
 
-      channel.publish(exchange, routingKey, contents);
+      const options: amqplib.Options.Publish = {
+        persistent: config.publishPersistent
+      };
+      channel.publish(exchange, routingKey, contents, options);
     } catch (err) {
       const now = new Date().toISOString();
       console.log(
