@@ -20,8 +20,9 @@ export const createAcker = () => {
     }
   }, REQUEUE_CHECK);
 
-  process.on('exit', () => {
+  process.on('exit', async () => {
     clearTimeout(timeout);
+    await pool.end();
   });
 
   return async (message: Notification) => {
