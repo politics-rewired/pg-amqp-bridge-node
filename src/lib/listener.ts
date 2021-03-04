@@ -22,7 +22,7 @@ export const registerListener = async (channel: string, fns: Listener[]) => {
   subscriber.events.on('error', (err: Error) => {
     console.error('Client got fatal error', err);
     console.log('Shutting down...');
-    process.exit();
+    process.exit(1);
   });
 
   subscriber.events.on('reconnect', attempt => {
@@ -33,4 +33,8 @@ export const registerListener = async (channel: string, fns: Listener[]) => {
   await subscriber.listenTo(channel);
 
   console.log(`Listening for messages updates on pg channel ${channel}`);
+
+  process.on('exit', () => {
+    subscriber.close();
+  });
 };

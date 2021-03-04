@@ -6,8 +6,11 @@ const REQUEUE_CHECK = 30000;
 export const createAcker = () => {
   const pool = new Pool({ connectionString: config.databaseUrl });
 
-  setTimeout(async () => {
-    console.log(`Renotifying unacked jobs older than ${REQUEUE_CHECK}`);
+  const timeout = setTimeout(async () => {
+    const now = new Date().toISOString();
+    console.log(
+      `${now} INFO Renotifying unacked jobs older than ${REQUEUE_CHECK}`
+    );
     try {
       await pool.query(
         'call assemble_worker.renotify_unacked_jobs_queued_for_more_than_30_seconds()'
@@ -17,7 +20,21 @@ export const createAcker = () => {
     }
   }, REQUEUE_CHECK);
 
+  process.on('exit', () => {
+    clearTimeout(timeout);
+  });
+
   return async (message: Notification) => {
+    const messageStr = JSON.stringify(message);
+
+    if (!message.payload) {
+      const now = new Date().toISOString();
+      console.log(
+        `${now} WARN encountered empty payload acking message: ${messageStr}`
+      );
+      return;
+    }
+
     try {
       const splitByBar = message.payload.split('|');
       const stringContents = splitByBar.slice(1).join('|');
@@ -26,14 +43,18 @@ export const createAcker = () => {
       const job_id = json.job_id;
 
       if (config.verbose) {
-        console.log(`Acking job ${job_id}`);
+        const now = new Date().toISOString();
+        console.log(`${now} INFO Acking job ${job_id}`);
         await pool.query(
           'update assemble_worker.jobs set last_acked_at = $1 where id = $2',
           [new Date(), job_id]
         );
       }
-    } catch (ex) {
-      console.error('Could not ack job', ex);
+    } catch (err) {
+      const now = new Date().toISOString();
+      console.log(
+        `${now} ERROR encountered error acking job: ${err.message}. Message: ${messageStr}`
+      );
     }
   };
 };

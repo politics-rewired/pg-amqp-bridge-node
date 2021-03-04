@@ -18,7 +18,8 @@ const main = async () => {
         `Ready to accept messages on pg channel ${pgChannel} – forwarding to exchange ${amqpExhange}`
       );
     } catch (ex) {
-      console.error(ex);
+      console.error(`Error setting up channel ${bridge}:`, ex);
+      process.exit(1);
     }
   }
 };
