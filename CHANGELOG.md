@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/politics-rewired/pg-amqp-bridge-node/compare/v1.1.0...v1.2.0) (2021-03-04)
+
+
+### Features
+
+* **teardown:** end pg-pool ([94afaad](https://github.com/politics-rewired/pg-amqp-bridge-node/commit/94afaad44595badfc83f4dbc0122f21bf9c76f51))
+
 ## 1.1.0 (2021-03-04)
 
 
