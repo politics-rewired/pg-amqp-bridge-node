@@ -9,6 +9,7 @@
   "license": "MIT",
   "keywords": [],
   "scripts": {
+    "start": "ts-node -T src/index.ts",
     "describe": "npm-scripts-info",
     "build": "run-s clean && run-p build:*",
     "build:main": "tsc -p tsconfig.json",
@@ -60,6 +61,7 @@
     "@bitjson/typedoc": "^0.15.0-0",
     "@istanbuljs/nyc-config-typescript": "^0.1.3",
     "@types/amqplib": "^0.5.13",
+    "@types/node": "^14.14.31",
     "@types/pg": "^7.11.2",
     "ava": "2.2.0",
     "codecov": "^3.5.0",
@@ -71,6 +73,7 @@
     "prettier": "^1.18.2",
     "standard-version": "^6.0.1",
     "trash-cli": "^3.0.0",
+    "ts-node": "^9.1.1",
     "tslint": "^5.18.0",
     "tslint-config-prettier": "^1.18.0",
     "tslint-immutable": "^6.0.1",
