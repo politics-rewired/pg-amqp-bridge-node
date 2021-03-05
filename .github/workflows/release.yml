@@ -18,7 +18,7 @@ jobs:
         id: vars
         run: echo ::set-output name=tag::${GITHUB_REF#refs/tags/} && echo ::set-output name=version::${GITHUB_REF#refs/tags/v}
       - name: Generate Docker image tag
-        run: echo "$DOCKER_IMAGE:${{ steps.vars.outputs.version }}" > $BODY_PATH
+        run: 'echo "Docker image: \`$DOCKER_IMAGE:${{ steps.vars.outputs.version }}\`" > $BODY_PATH'
       - name: Generate Changelog
         run: awk "/[#]{2,3} \[${{ steps.vars.outputs.version }}/{flag=1; next} /[#]{2,3} \[/{flag=0} flag" CHANGELOG.md >> $BODY_PATH
       - name: Release
