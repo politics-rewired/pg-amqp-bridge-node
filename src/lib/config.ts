@@ -1,17 +1,12 @@
 import envalid from 'envalid';
 const { str, bool } = envalid;
 
-enum LogLevel {
-  Info = 'info',
-  Debug = 'debug'
-}
-
 interface Config {
   databaseUrl: string;
   amqpUrl: string;
   bridgeChannels: string;
   publishPersistent: boolean;
-  verbose: boolean;
+  logLevel: string;
 }
 
 const env = envalid.cleanEnv(process.env, {
@@ -19,7 +14,10 @@ const env = envalid.cleanEnv(process.env, {
   BRIDGE_CHANNELS: str(),
   POSTGRESQL_URI: str(),
   PUBLISH_PERSISTENT: bool({ default: true }),
-  VERBOSE: bool({ default: false })
+  LOG_LEVEL: str({
+    default: 'info',
+    devDefault: 'debug'
+  })
 });
 
 const config: Config = {
@@ -27,7 +25,7 @@ const config: Config = {
   bridgeChannels: env.BRIDGE_CHANNELS,
   databaseUrl: env.POSTGRESQL_URI,
   publishPersistent: env.PUBLISH_PERSISTENT,
-  verbose: env.VERBOSE
+  logLevel: env.LOG_LEVEL
 };
 
 export default config;

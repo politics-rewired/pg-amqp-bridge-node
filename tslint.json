@@ -24,8 +24,6 @@
       "options": [true, { "pgListen": "createSubscriber" }]
     },
 
-    "no-console": [false],
-
     // https://github.com/palantir/tslint/pull/3607#issuecomment-355713503
     "object-literal-sort-keys": [true, "shorthand-first"],
     "object-shorthand-properties-first": false
