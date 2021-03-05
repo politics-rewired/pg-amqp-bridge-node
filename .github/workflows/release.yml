@@ -11,17 +11,25 @@ jobs:
   cut-release:
     runs-on: ubuntu-latest
     env:
-      TAG: 'v1.3.0'
+      GITHUB_REF_MOCK: 'refs/tags/v1.3.0'
       DOCKER_IMAGE: gcr.io/assemble-services/pg-amqp-bridge-node
+      BODY_PATH: release-body.txt
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Set output
+        id: vars
+        run: echo ::set-output name=tag::${GITHUB_REF_MOCK#refs/tags/v}
       - name: Generate Docker image tag
-        run: echo "$DOCKER_IMAGE:${TAG#v}" > ${{ github.workflow }}-CHANGELOG.txt
+        env:
+          RELEASE_TAG: ${{ steps.vars.outputs.tag }}
+        run: echo "$DOCKER_IMAGE:$RELEASE_TAG" > $BODY_PATH
       - name: Generate Changelog
-        run: awk "/[#]{2,3} \[${TAG#v}/{flag=1; next} /[#]{2,3} \[/{flag=0} flag" CHANGELOG.md >> ${{ github.workflow }}-CHANGELOG.txt
+        env:
+          RELEASE_TAG: ${{ steps.vars.outputs.tag }}
+        run: awk "/[#]{2,3} \[$RELEASE_TAG/{flag=1; next} /[#]{2,3} \[/{flag=0} flag" CHANGELOG.md >> $BODY_PATH
       - name: Print Body
-        run: cat ${{ github.workflow }}-CHANGELOG.txt
+        run: cat $BODY_PATH
       # - name: Release
       #   uses: softprops/action-gh-release@v1
       #   if: startsWith(github.ref, 'refs/tags/')
