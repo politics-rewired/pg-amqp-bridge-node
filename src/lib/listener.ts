@@ -2,10 +2,13 @@ import { Notification } from 'pg';
 import createSubscriber from 'pg-listen';
 import config from './config';
 
+import config from './config';
+import logger from './logger';
+
 type Listener = (msg: Notification) => void;
 
 export const registerListener = async (channel: string, fns: Listener[]) => {
-  console.log(`Attempting to connect to ${channel}`);
+  logger.info(`Attempting to connect to ${channel}`);
 
   const subscriber = createSubscriber(
     { connectionString: config.databaseUrl },
@@ -20,19 +23,19 @@ export const registerListener = async (channel: string, fns: Listener[]) => {
   }
 
   subscriber.events.on('error', (err: Error) => {
-    console.error('Client got fatal error', err);
-    console.log('Shutting down...');
+    logger.error('Client got fatal error: ', err);
+    logger.info('Shutting down...');
     process.exit(1);
   });
 
   subscriber.events.on('reconnect', attempt => {
-    console.log(`Attempting reconnect - attempt ${attempt}`);
+    logger.info(`Attempting reconnect - attempt ${attempt}`);
   });
 
   await subscriber.connect();
   await subscriber.listenTo(channel);
 
-  console.log(`Listening for messages updates on pg channel ${channel}`);
+  logger.info(`Listening for messages updates on pg channel ${channel}`);
 
   process.on('exit', () => {
     subscriber.close();

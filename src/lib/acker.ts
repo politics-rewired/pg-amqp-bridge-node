@@ -1,5 +1,6 @@
 import { Notification, Pool } from 'pg';
 import config from './config';
+import logger from './logger';
 
 const REQUEUE_CHECK = 30000;
 
@@ -7,16 +8,13 @@ export const createAcker = () => {
   const pool = new Pool({ connectionString: config.databaseUrl });
 
   const timeout = setTimeout(async () => {
-    const now = new Date().toISOString();
-    console.log(
-      `${now} INFO Renotifying unacked jobs older than ${REQUEUE_CHECK}`
-    );
+    logger.info(`Renotifying unacked jobs older than ${REQUEUE_CHECK}`);
     try {
       await pool.query(
         'call assemble_worker.renotify_unacked_jobs_queued_for_more_than_30_seconds()'
       );
-    } catch (ex) {
-      console.error('Could not renotify unacked jobs', ex);
+    } catch (err) {
+      logger.error('Could not renotify unacked jobs', err);
     }
   }, REQUEUE_CHECK);
 
@@ -29,10 +27,7 @@ export const createAcker = () => {
     const messageStr = JSON.stringify(message);
 
     if (!message.payload) {
-      const now = new Date().toISOString();
-      console.log(
-        `${now} WARN encountered empty payload acking message: ${messageStr}`
-      );
+      logger.warn(`Encountered empty payload acking message: ${messageStr}`);
       return;
     }
 
@@ -43,19 +38,15 @@ export const createAcker = () => {
       const json = JSON.parse(stringContents);
       const job_id = json.job_id;
 
-      if (config.verbose) {
-        const now = new Date().toISOString();
-        console.log(`${now} INFO Acking job ${job_id}`);
-        await pool.query(
-          'update assemble_worker.jobs set last_acked_at = $1 where id = $2',
-          [new Date(), job_id]
-        );
-      }
-    } catch (err) {
-      const now = new Date().toISOString();
-      console.log(
-        `${now} ERROR encountered error acking job: ${err.message}. Message: ${messageStr}`
+      logger.debug(`Acking job ${job_id}`);
+      await pool.query(
+        'update assemble_worker.jobs set last_acked_at = $1 where id = $2',
+        [new Date(), job_id]
       );
+    } catch (err) {
+      logger.error(`Encountered error acking job: ${err.message}`, {
+        messageStr
+      });
     }
   };
 };

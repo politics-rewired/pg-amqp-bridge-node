@@ -1,6 +1,7 @@
 import { createAcker } from './lib/acker';
 import config from './lib/config';
 import { registerListener } from './lib/listener';
+import logger from './lib/logger';
 import { createPublisher } from './lib/publisher';
 
 const main = async () => {
@@ -14,11 +15,11 @@ const main = async () => {
       const acker = createAcker();
 
       await registerListener(pgChannel, [publisher, acker]);
-      console.log(
+      logger.info(
         `Ready to accept messages on pg channel ${pgChannel} – forwarding to exchange ${amqpExhange}`
       );
-    } catch (ex) {
-      console.error(`Error setting up channel ${bridge}:`, ex);
+    } catch (err) {
+      logger.error(`Error setting up channel ${bridge}: `, err);
       process.exit(1);
     }
   }
