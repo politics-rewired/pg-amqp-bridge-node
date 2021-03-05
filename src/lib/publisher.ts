@@ -1,6 +1,5 @@
 import amqplib from 'amqplib';
 import { Notification } from 'pg';
-import config from './config';
 
 import config from './config';
 import logger from './logger';

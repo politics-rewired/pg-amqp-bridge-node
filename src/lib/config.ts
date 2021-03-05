@@ -12,20 +12,20 @@ interface Config {
 const env = envalid.cleanEnv(process.env, {
   AMQP_URI: str(),
   BRIDGE_CHANNELS: str(),
-  POSTGRESQL_URI: str(),
-  PUBLISH_PERSISTENT: bool({ default: true }),
   LOG_LEVEL: str({
     default: 'info',
     devDefault: 'debug'
-  })
+  }),
+  POSTGRESQL_URI: str(),
+  PUBLISH_PERSISTENT: bool({ default: true })
 });
 
 const config: Config = {
   amqpUrl: env.AMQP_URI,
   bridgeChannels: env.BRIDGE_CHANNELS,
   databaseUrl: env.POSTGRESQL_URI,
-  publishPersistent: env.PUBLISH_PERSISTENT,
-  logLevel: env.LOG_LEVEL
+  logLevel: env.LOG_LEVEL,
+  publishPersistent: env.PUBLISH_PERSISTENT
 };
 
 export default config;
