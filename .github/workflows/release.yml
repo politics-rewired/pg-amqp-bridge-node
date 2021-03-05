@@ -1,0 +1,30 @@
+name: Release
+
+on: push
+
+# on:
+#   push:
+#     tags:
+#       - "v*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Export Tag
+        run: export TAG=1.3.0
+      - name: Generate Docker image tag
+        run: echo "gcr.io/assemble-services/pg-amqp-bridge-node:${TAG#v}" > ${{ github.workflow }}-CHANGELOG.txt
+      - name: Generate Changelog
+        run: awk "/[#]{2,3} \[${TAG#v}/{flag=1; next} /[#]{2,3} \[/{flag=0} flag" CHANGELOG.md >> ${{ github.workflow }}-CHANGELOG.txt
+      - name: Print Body
+        run: cat ${{ github.workflow }}-CHANGELOG.txt
+      # - name: Release
+      #   uses: softprops/action-gh-release@v1
+      #   if: startsWith(github.ref, 'refs/tags/')
+      #   with:
+      #     body_path: ${{ github.workflow }}-CHANGELOG.txt
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
