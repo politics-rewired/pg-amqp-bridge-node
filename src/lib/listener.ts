@@ -1,6 +1,5 @@
 import { Notification } from 'pg';
 import createSubscriber from 'pg-listen';
-import config from './config';
 
 import config from './config';
 import logger from './logger';
