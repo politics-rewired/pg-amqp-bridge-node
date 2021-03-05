@@ -1,5 +1,5 @@
+import { Notification, Pool } from 'pg';
 import config from './config';
-import { Pool, Notification } from 'pg';
 
 const REQUEUE_CHECK = 30000;
 

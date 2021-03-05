@@ -1,6 +1,6 @@
 import amqplib from 'amqplib';
-import config from './config';
 import { Notification } from 'pg';
+import config from './config';
 
 export const createPublisher = async exchange => {
   const connection = await amqplib.connect(config.amqpUrl);

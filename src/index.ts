@@ -1,12 +1,12 @@
-import config from './lib/config';
-import { createPublisher } from './lib/publisher';
-import { registerListener } from './lib/listener';
 import { createAcker } from './lib/acker';
+import config from './lib/config';
+import { registerListener } from './lib/listener';
+import { createPublisher } from './lib/publisher';
 
 const main = async () => {
   const bridges = config.bridgeChannels.split(',');
 
-  for (let bridge of bridges) {
+  for (const bridge of bridges) {
     try {
       const [pgChannel, amqpExhange] = bridge.split(':');
 

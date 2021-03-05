@@ -1,6 +1,6 @@
 import { Notification } from 'pg';
-import config from './config';
 import createSubscriber from 'pg-listen';
+import config from './config';
 
 type Listener = (msg: Notification) => void;
 
@@ -15,7 +15,7 @@ export const registerListener = async (channel: string, fns: Listener[]) => {
     { parse: s => s }
   );
 
-  for (let fn of fns) {
+  for (const fn of fns) {
     subscriber.events.on('notification', fn);
   }
 
