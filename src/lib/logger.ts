@@ -11,9 +11,9 @@ const logger = winston.createLogger({
         winston.format.timestamp(),
         winston.format.json()
       ),
-      level: config.logLevel
-    })
-  ]
+      level: config.logLevel,
+    }),
+  ],
 });
 
 export default logger;

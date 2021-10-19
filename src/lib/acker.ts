@@ -45,7 +45,7 @@ export const createAcker = () => {
       );
     } catch (err) {
       logger.error(`Encountered error acking job: ${err.message}`, {
-        messageStr
+        messageStr,
       });
     }
   };

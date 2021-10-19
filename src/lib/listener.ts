@@ -14,7 +14,7 @@ export const registerListener = async (channel: string, fns: Listener[]) => {
     // by default, pg-listen assumes your payload is JSON
     // we use a custom format - ${routingKey}|${jobPayload}
     // parsing this format is handled elsewhere in in the publisher / acker
-    { parse: s => s }
+    { parse: (s) => s }
   );
 
   for (const fn of fns) {
@@ -27,7 +27,7 @@ export const registerListener = async (channel: string, fns: Listener[]) => {
     process.exit(1);
   });
 
-  subscriber.events.on('reconnect', attempt => {
+  subscriber.events.on('reconnect', (attempt) => {
     logger.info(`Attempting reconnect - attempt ${attempt}`);
   });
 

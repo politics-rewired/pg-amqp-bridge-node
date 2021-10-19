@@ -4,7 +4,7 @@ import { Notification } from 'pg';
 import config from './config';
 import logger from './logger';
 
-export const createPublisher = async exchange => {
+export const createPublisher = async (exchange) => {
   const connection = await amqplib.connect(config.amqpUrl);
   const channel = await connection.createChannel();
 
@@ -25,12 +25,12 @@ export const createPublisher = async exchange => {
       logger.debug(`Forwarding message to ${routingKey}: ${stringContents}`);
 
       const options: amqplib.Options.Publish = {
-        persistent: config.publishPersistent
+        persistent: config.publishPersistent,
       };
       channel.publish(exchange, routingKey, contents, options);
     } catch (err) {
       logger.error(`encountered error publishing message: ${err.message}`, {
-        messageStr
+        messageStr,
       });
     }
   };
