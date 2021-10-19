@@ -1,3 +1,5 @@
+// tslint:disable-next-line: no-var-requires
+require('dotenv').config();
 import envalid from 'envalid';
 const { str, bool } = envalid;
 
