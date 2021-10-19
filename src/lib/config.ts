@@ -1,7 +1,6 @@
 // tslint:disable-next-line: no-var-requires
 require('dotenv').config();
-import envalid from 'envalid';
-const { str, bool } = envalid;
+import { cleanEnv, str, bool } from 'envalid';
 
 interface Config {
   databaseUrl: string;
@@ -11,7 +10,7 @@ interface Config {
   logLevel: string;
 }
 
-const env = envalid.cleanEnv(process.env, {
+const env = cleanEnv(process.env, {
   AMQP_URI: str(),
   BRIDGE_CHANNELS: str(),
   LOG_LEVEL: str({
