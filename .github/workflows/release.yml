@@ -9,7 +9,7 @@ jobs:
   cut-gh-release:
     runs-on: ubuntu-latest
     env:
-      DOCKER_IMAGE: gcr.io/assemble-services/pg-amqp-bridge-node
+      DOCKER_IMAGE: us-east4-docker.pkg.dev/assemble-services/apps/pg-amqp-bridge
       BODY_PATH: release-body.txt
     steps:
       - name: Checkout
