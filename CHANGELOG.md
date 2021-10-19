@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.2](https://github.com/politics-rewired/pg-amqp-bridge-node/compare/v1.3.1...v1.3.2) (2021-10-19)
+
+
+### Bug Fixes
+
+* import from envalid correctly ([c886638](https://github.com/politics-rewired/pg-amqp-bridge-node/commit/c886638a9525253aba454e852fe4e70e42e0f899))
+
 ### [1.3.1](https://github.com/politics-rewired/pg-amqp-bridge-node/compare/v1.3.0...v1.3.1) (2021-10-19)
 
 ## [1.3.0](https://github.com/politics-rewired/pg-amqp-bridge-node/compare/v1.2.0...v1.3.0) (2021-03-05)
